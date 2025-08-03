@@ -17,12 +17,12 @@ namespace GameLogic
         /// <summary>
         /// TODO: 临时用，每个角色身上的输入行为过期时间配置，到时候换上自己的
         /// </summary>
-        public readonly Dictionary<KeyValuePair<EInputAction, EInputState>, double> PlayerInputConfig = new Dictionary<KeyValuePair<EInputAction, EInputState>, double>();
+        public readonly Dictionary<(EInputAction Action, EInputState State), double> PlayerInputConfig = new Dictionary<(EInputAction, EInputState), double>();
 
         /// <summary>
         /// TODO: 临时用，每个角色身上的输入行为优先级配置，到时候换上自己的
         /// </summary>
-        public readonly Dictionary<KeyValuePair<EInputAction, EInputState>, int> PlayerInputPriorityConfig = new Dictionary<KeyValuePair<EInputAction, EInputState>, int>();
+        public readonly Dictionary<(EInputAction Action, EInputState State), int> PlayerInputPriorityConfig = new Dictionary<(EInputAction, EInputState), int>();
 
         private readonly List<InputEvent> _inputEvents = new List<InputEvent>();
         private readonly List<InputCache> _inputCaches = new List<InputCache>();
@@ -142,7 +142,6 @@ namespace GameLogic
 
             var bestCommand = GetBestCommand(_inputCommands);
             _inputCommands.Remove(bestCommand);
-            _inputCaches.Clear();
             _inputEvents.Clear();
 
             CacheInput(_inputCommands);
@@ -197,7 +196,7 @@ namespace GameLogic
             for (int i = _inputCaches.Count - 1; i >= 0; i--)
             {
                 var cache = _inputCaches[i];
-                if (cache.AccumulateTime > PlayerInputConfig[new KeyValuePair<EInputAction, EInputState>(cache.Action, cache.State)])
+                if (cache.AccumulateTime > PlayerInputConfig[(cache.Action, cache.State)])
                 {
                     _inputCaches.RemoveAt(i);
                 }
@@ -209,8 +208,8 @@ namespace GameLogic
             var bestCommand = commands[0];
             for (int i = 1; i < commands.Count; i++)
             {
-                if (PlayerInputPriorityConfig[new KeyValuePair<EInputAction, EInputState>(commands[i].Action, commands[i].State)] >
-                    PlayerInputPriorityConfig[new KeyValuePair<EInputAction, EInputState>(bestCommand.Action, bestCommand.State)])
+                if (PlayerInputPriorityConfig[(commands[i].Action, commands[i].State)] >
+                    PlayerInputPriorityConfig[(bestCommand.Action, bestCommand.State)])
                 {
                     bestCommand = commands[i];
                 }

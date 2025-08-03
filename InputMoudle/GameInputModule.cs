@@ -46,12 +46,13 @@ namespace GameLogic
         /// <typeparam name="T">要移除的输入处理器类型。</typeparam>
         public void RemoveInputHandler<T>() where T : class, IInputHandler, new()
         {
-            foreach (IInputHandler inputHandler in _inputHandlers)
+            for (int i = _inputHandlers.Count - 1; i >= 0; i--)
             {
-                if (inputHandler is T)
+                if (_inputHandlers[i] is T)
                 {
-                    _inputHandlers.Remove(inputHandler);
-                    MemoryPool.Release(inputHandler);
+                    var handlerToRemove = _inputHandlers[i];
+                    _inputHandlers.RemoveAt(i);
+                    MemoryPool.Release(handlerToRemove);
                     break;
                 }
             }
@@ -92,8 +93,9 @@ namespace GameLogic
                 {
                     if (layers[i] is T)
                     {
+                        var layerToRemove = layers[i];
                         layers.RemoveAt(i);
-                        MemoryPool.Release(layers[i]);
+                        MemoryPool.Release(layerToRemove);
                         break;
                     }
                 }
@@ -107,6 +109,8 @@ namespace GameLogic
 
         /// <summary>
         /// 获取指定实体的所有输入层，按优先级排序。
+        /// 对于GetLayer时的优先级排序，建议在AddLayer的业务逻辑时候就已经按照优先级去Add
+        /// 避免每帧进行优先级排序的性能浪费
         /// </summary>
         /// <param name="entityID">实体ID。</param>
         /// <returns>排序后的输入层列表。</returns>
@@ -114,9 +118,8 @@ namespace GameLogic
         {
             if (_inputLayersDict.TryGetValue(entityID, out var value))
             {
-                return value.OrderBy(layer => layer.Priority).ToList();
+                return value;
             }
-
             return null;
         }
 
