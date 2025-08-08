@@ -976,5 +976,12 @@ namespace TEngine
             CacheTween(tween);
             return tween.Id;
         }
+        public long MaterialColor(Material target, Color startValue, Color endValue, float duration, Ease ease = Ease.Default, int cycles = 1, CycleMode cycleMode = CycleMode.Restart,
+            float startDelay = 0, float endDelay = 0, bool useUnscaledTime = false)
+        {
+            Tween tween = Tween.MaterialColor(target, startValue, endValue, duration, GetEase(ease), cycles, GetCycleMode(cycleMode), startDelay, endDelay, useUnscaledTime);
+            CacheTween(tween);
+            return tween.Id;
+        }
     }
 }
