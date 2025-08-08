@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体组辅助器基类。

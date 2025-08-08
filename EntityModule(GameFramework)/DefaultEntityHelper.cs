@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using TEngine;
+using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 默认实体辅助器。

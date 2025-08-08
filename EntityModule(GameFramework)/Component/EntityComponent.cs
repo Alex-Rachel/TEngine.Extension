@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using TEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体组件基类。

@@ -1,6 +1,7 @@
-﻿using YooAsset;
+﻿using TEngine;
+using YooAsset;
 
-namespace TEngine
+namespace GameLogic
 {
     internal sealed partial class EntityManager
     {
@@ -44,7 +45,7 @@ namespace TEngine
                 _entityHelper = null;
             }
 
-            protected internal override void Release(bool isShutdown)
+            protected override void Release(bool isShutdown)
             {
                 _entityHelper.ReleaseEntity(_entityAsset, Target);
             }

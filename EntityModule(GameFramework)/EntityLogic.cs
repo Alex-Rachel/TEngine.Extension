@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using TEngine;
 using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体逻辑基类。

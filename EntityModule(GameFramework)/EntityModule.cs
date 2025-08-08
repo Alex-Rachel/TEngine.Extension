@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using GameLogic;
+using TEngine;
 using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体组件。
     /// </summary>
-    [DisallowMultipleComponent]
-    public sealed partial class EntityModule : MonoBehaviour
+
+    public sealed partial class EntityModule :SingletonBehaviour<EntityModule>
     {
         public const int DefaultPriority = 0;
 
@@ -48,9 +50,11 @@ namespace TEngine
         /// <summary>
         /// 游戏框架组件初始化。
         /// </summary>
-        private void Awake()
+        protected override void OnLoad()
         {
-            m_EntityManager = ModuleSystem.GetModule<IEntityManager>();
+            base.OnLoad();
+            EntityManager localizationModule = new EntityManager();
+            m_EntityManager = ModuleSystem.RegisterModule<IEntityManager>(localizationModule);
             if (m_EntityManager == null)
             {
                 Log.Fatal("Entity manager is invalid.");
@@ -60,9 +64,10 @@ namespace TEngine
             m_EntityManager.ShowEntitySuccess += OnShowEntitySuccess;
             m_EntityManager.ShowEntityFailure += OnShowEntityFailure;
             m_EntityManager.HideEntityComplete += OnHideEntityComplete;
+            InitStart();
         }
 
-        private void Start()
+        private void InitStart()
         {
             m_EntityManager.SetResourceManager(ModuleSystem.GetModule<IResourceModule>());
 
@@ -70,9 +75,7 @@ namespace TEngine
 
             GameObject defaultEntityHelper = new GameObject("Default Entity Helper");
             defaultEntityHelper.transform.SetParent(this.transform);
-            defaultEntityHelper.AddComponent<DefaultEntityHelper>();
-
-            EntityHelperBase entityHelper = defaultEntityHelper.AddComponent<DefaultEntityHelper>();//Helper.CreateHelper(m_EntityHelperTypeName, m_CustomEntityHelper);
+            EntityHelperBase entityHelper =  defaultEntityHelper.AddComponent<DefaultEntityHelper>();
             if (entityHelper == null)
             {
                 Log.Error("Can not create entity helper.");
@@ -91,16 +94,6 @@ namespace TEngine
                 m_InstanceRoot = new GameObject("Entity Instances").transform;
                 m_InstanceRoot.SetParent(gameObject.transform);
                 m_InstanceRoot.localScale = Vector3.one;
-            }
-            DontDestroyOnLoad(m_InstanceRoot);
-            
-            for (int i = 0; i < m_EntityGroups.Length; i++)
-            {
-                if (!AddEntityGroup(m_EntityGroups[i].Name, m_EntityGroups[i].InstanceAutoReleaseInterval, m_EntityGroups[i].InstanceCapacity, m_EntityGroups[i].InstanceExpireTime, m_EntityGroups[i].InstancePriority))
-                {
-                    Log.Warning("Add entity group '{0}' failure.", m_EntityGroups[i].Name);
-                    continue;
-                }
             }
         }
 
@@ -1106,5 +1099,6 @@ namespace TEngine
         {
             GameEvent.Send(EntityModule.OnHideEntityCompleteEvent, entityId, entityAssetName, entityGroupName, userData);
         }
+        
     }
 }
