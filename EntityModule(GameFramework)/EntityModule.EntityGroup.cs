@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     public sealed partial class EntityModule
     {

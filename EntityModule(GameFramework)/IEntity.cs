@@ -1,4 +1,4 @@
-﻿namespace TEngine
+﻿namespace GameLogic
 {
     /// <summary>
     /// 实体接口。

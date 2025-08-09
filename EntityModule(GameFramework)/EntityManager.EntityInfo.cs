@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using TEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     internal sealed partial class EntityManager
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体组接口。

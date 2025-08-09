@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using YooAsset;
+using TEngine;
+using UnityEngine;
 
-namespace TEngine
+
+namespace GameLogic
 {
     /// <summary>
     /// 实体管理器。
@@ -489,7 +491,7 @@ namespace TEngine
         {
             ShowEntity(entityId, entityAssetName, entityGroupName, EntityModule.DefaultPriority, null);
         }
-
+        
         /// <summary>
         /// 显示实体。
         /// </summary>
@@ -501,7 +503,7 @@ namespace TEngine
         {
             ShowEntity(entityId, entityAssetName, entityGroupName, priority, null);
         }
-
+        
         /// <summary>
         /// 显示实体。
         /// </summary>
@@ -513,6 +515,8 @@ namespace TEngine
         {
             ShowEntity(entityId, entityAssetName, entityGroupName, EntityModule.DefaultPriority, userData);
         }
+
+
 
         /// <summary>
         /// 同步显示实体。
@@ -528,38 +532,38 @@ namespace TEngine
             {
                 throw new GameFrameworkException("You must set resource manager first.");
             }
-
+        
             if (_entityHelper == null)
             {
                 throw new GameFrameworkException("You must set entity helper first.");
             }
-
+        
             if (string.IsNullOrEmpty(entityAssetName))
             {
                 throw new GameFrameworkException("Entity asset name is invalid.");
             }
-
+        
             if (string.IsNullOrEmpty(entityGroupName))
             {
                 throw new GameFrameworkException("Entity group name is invalid.");
             }
-
+        
             if (HasEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity id '{0}' is already exist.", entityId));
             }
-
+        
             if (IsLoadingEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity '{0}' is already being loaded.", entityId));
             }
-
+        
             EntityGroup entityGroup = (EntityGroup)GetEntityGroup(entityGroupName);
             if (entityGroup == null)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity group '{0}' is not exist.", entityGroupName));
             }
-
+        
             EntityInstanceObject entityInstanceObject = entityGroup.SpawnEntityInstanceObject(entityAssetName);
             if (entityInstanceObject == null)
             {
@@ -594,38 +598,38 @@ namespace TEngine
             {
                 throw new GameFrameworkException("You must set resource manager first.");
             }
-
+        
             if (_entityHelper == null)
             {
                 throw new GameFrameworkException("You must set entity helper first.");
             }
-
+        
             if (string.IsNullOrEmpty(entityAssetName))
             {
                 throw new GameFrameworkException("Entity asset name is invalid.");
             }
-
+        
             if (string.IsNullOrEmpty(entityGroupName))
             {
                 throw new GameFrameworkException("Entity group name is invalid.");
             }
-
+        
             if (HasEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity id '{0}' is already exist.", entityId));
             }
-
+        
             if (IsLoadingEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity '{0}' is already being loaded.", entityId));
             }
-
+        
             EntityGroup entityGroup = (EntityGroup)GetEntityGroup(entityGroupName);
             if (entityGroup == null)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity group '{0}' is not exist.", entityGroupName));
             }
-
+        
             EntityInstanceObject entityInstanceObject = entityGroup.SpawnEntityInstanceObject(entityAssetName);
             if (entityInstanceObject == null)
             {
@@ -660,38 +664,38 @@ namespace TEngine
             {
                 throw new GameFrameworkException("You must set resource manager first.");
             }
-
+        
             if (_entityHelper == null)
             {
                 throw new GameFrameworkException("You must set entity helper first.");
             }
-
+        
             if (string.IsNullOrEmpty(entityAssetName))
             {
                 throw new GameFrameworkException("Entity asset name is invalid.");
             }
-
+        
             if (string.IsNullOrEmpty(entityGroupName))
             {
                 throw new GameFrameworkException("Entity group name is invalid.");
             }
-
+        
             if (HasEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity id '{0}' is already exist.", entityId));
             }
-
+        
             if (IsLoadingEntity(entityId))
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity '{0}' is already being loaded.", entityId));
             }
-
+        
             EntityGroup entityGroup = (EntityGroup)GetEntityGroup(entityGroupName);
             if (entityGroup == null)
             {
                 throw new GameFrameworkException(Utility.Text.Format("Entity group '{0}' is not exist.", entityGroupName));
             }
-
+        
             EntityInstanceObject entityInstanceObject = entityGroup.SpawnEntityInstanceObject(entityAssetName);
             if (entityInstanceObject == null)
             {
@@ -711,7 +715,7 @@ namespace TEngine
                 }).Forget();
                 return;
             }
-
+        
             InternalShowEntity(entityId, entityAssetName, entityGroup, entityInstanceObject.Target, false, 0f, userData);
         }
 
@@ -1240,7 +1244,7 @@ namespace TEngine
 
                 if (_showEntitySuccessEventHandler != null)
                 {
-                    TEngine.ShowEntityInfo showEntityInfo = (TEngine.ShowEntityInfo)userData;
+                   GameLogic.ShowEntityInfo showEntityInfo = (GameLogic.ShowEntityInfo)userData;
                     Type entityLogicType = showEntityInfo.EntityLogicType;
                     _showEntitySuccessEventHandler.Invoke(entityLogicType, entity, duration, userData);
                 }
@@ -1250,7 +1254,7 @@ namespace TEngine
             {
                 if (_showEntityFailureEventHandler != null)
                 {
-                    TEngine.ShowEntityInfo showEntityInfo = (TEngine.ShowEntityInfo)userData;
+                    GameLogic.ShowEntityInfo showEntityInfo = (GameLogic.ShowEntityInfo)userData;
                     Type entityLogicType = showEntityInfo.EntityLogicType;
                     _showEntityFailureEventHandler.Invoke(entityId,entityLogicType,entityAssetName, entityGroup.Name, exception.ToString(), userData);
                     return null;
@@ -1306,7 +1310,7 @@ namespace TEngine
             {
                 throw new GameFrameworkException("Show entity info is invalid.");
             }
-
+        
             if (_entitiesToReleaseOnLoad.Contains(showEntityInfo.SerialId))
             {
                 _entitiesToReleaseOnLoad.Remove(showEntityInfo.SerialId);
@@ -1314,11 +1318,11 @@ namespace TEngine
                 _entityHelper.ReleaseEntity(entityAsset, null);
                 return null;
             }
-
+        
             _entitiesBeingLoaded.Remove(showEntityInfo.EntityId);
             EntityInstanceObject entityInstanceObject = EntityInstanceObject.Create(entityAssetName, entityAsset, _entityHelper.InstantiateEntity(entityAsset), _entityHelper);
             showEntityInfo.EntityGroup.RegisterEntityInstanceObject(entityInstanceObject, true);
-
+        
             IEntity entity = InternalShowEntity(showEntityInfo.EntityId, entityAssetName, showEntityInfo.EntityGroup, entityInstanceObject.Target, true, duration, showEntityInfo.UserData);
             MemoryPool.Release(showEntityInfo);
             return entity;
@@ -1331,24 +1335,24 @@ namespace TEngine
             {
                 throw new GameFrameworkException("Show entity info is invalid.");
             }
-
+    
             if (_entitiesToReleaseOnLoad.Contains(showEntityInfo.SerialId))
             {
                 _entitiesToReleaseOnLoad.Remove(showEntityInfo.SerialId);
                 return;
             }
-
+    
             _entitiesBeingLoaded.Remove(showEntityInfo.EntityId);
             string appendErrorMessage = Utility.Text.Format("Load entity failure, asset name '{0}', error message '{1}'.", entityAssetName, errorMessage);
             if (_showEntityFailureEventHandler != null)
             {
-                TEngine.ShowEntityInfo info = (TEngine.ShowEntityInfo)showEntityInfo.UserData;
+                GameLogic.ShowEntityInfo info = (GameLogic.ShowEntityInfo)showEntityInfo.UserData;
                 Type entityLogicType = info.EntityLogicType;
                 _showEntityFailureEventHandler.Invoke(showEntityInfo.EntityId, entityLogicType, entityAssetName, showEntityInfo.EntityGroup.Name, appendErrorMessage, showEntityInfo.UserData);
                 return;
             }
-
+    
             throw new GameFrameworkException(appendErrorMessage);
         }
-    }
+     }
 }

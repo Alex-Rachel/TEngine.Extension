@@ -1,4 +1,6 @@
-﻿namespace TEngine
+﻿using TEngine;
+
+namespace GameLogic
 {
     internal sealed partial class EntityManager : Module, IEntityManager
     {

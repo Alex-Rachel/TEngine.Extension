@@ -1,7 +1,8 @@
 ﻿using System;
+using TEngine;
 using UnityEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体。

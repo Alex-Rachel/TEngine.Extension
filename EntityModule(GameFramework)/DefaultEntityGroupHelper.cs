@@ -1,4 +1,4 @@
-﻿namespace TEngine
+﻿namespace GameLogic
 {
     /// <summary>
     /// 默认实体组辅助器。

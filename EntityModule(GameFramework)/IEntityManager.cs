@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using TEngine;
 
-namespace TEngine
+namespace GameLogic
 {
     /// <summary>
     /// 实体管理器接口。
@@ -178,7 +179,7 @@ namespace TEngine
         /// <param name="entityAssetName">实体资源名称。</param>
         /// <param name="entityGroupName">实体组名称。</param>
         void ShowEntity(int entityId, string entityAssetName, string entityGroupName);
-
+        
         /// <summary>
         /// 显示实体。
         /// </summary>
@@ -186,8 +187,8 @@ namespace TEngine
         /// <param name="entityAssetName">实体资源名称。</param>
         /// <param name="entityGroupName">实体组名称。</param>
         /// <param name="priority">加载实体资源的优先级。</param>
-        void ShowEntity(int entityId, string entityAssetName, string entityGroupName, int priority);
-
+         void ShowEntity(int entityId, string entityAssetName, string entityGroupName, int priority);
+        
         /// <summary>
         /// 显示实体。
         /// </summary>
@@ -195,8 +196,8 @@ namespace TEngine
         /// <param name="entityAssetName">实体资源名称。</param>
         /// <param name="entityGroupName">实体组名称。</param>
         /// <param name="userData">用户自定义数据。</param>
-        void ShowEntity(int entityId, string entityAssetName, string entityGroupName, object userData);
-
+         void ShowEntity(int entityId, string entityAssetName, string entityGroupName, object userData);
+        
         /// <summary>
         /// 显示实体。
         /// </summary>
@@ -205,7 +206,7 @@ namespace TEngine
         /// <param name="entityGroupName">实体组名称。</param>
         /// <param name="priority">加载实体资源的优先级。</param>
         /// <param name="userData">用户自定义数据。</param>
-        void ShowEntity(int entityId, string entityAssetName, string entityGroupName, int priority, object userData);
+         void ShowEntity(int entityId, string entityAssetName, string entityGroupName, int priority, object userData);
 
         /// <summary>
         /// 同步显示实体。
